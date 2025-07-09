@@ -2,6 +2,15 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
+
+   
+  <!-- 👇 Prevents mobile browsers from auto‑zooming or scaling the page -->
+  <meta name="viewport"
+        content="width=device-width,
+                 initial-scale=1,
+                 maximum-scale=1,
+                 user-scalable=no,
+                 viewport-fit=cover">
   <title>Video with Overlay Frame</title>
   <style>
     body {
@@ -13,12 +22,16 @@
       height: 100vh;
     }
 
+    
     .frame-container {
-      position: relative;
-      width: 90vw;
-      max-width: 420px;
-      aspect-ratio: 3/4;
-    }
+  position: relative;
+  width: 90vw;
+  max-width: 420px;
+  aspect-ratio: 3/4;
+  box-shadow: 0 0 15px rgba(0, 0, 0, 0.15);
+}
+
+    
 
     .video-wrapper {
       position: absolute;

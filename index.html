@@ -1,159 +1,82 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport"
-        content="width=device-width,
-                 initial-scale=1,
-                 maximum-scale=1,
-                 user-scalable=no,
-                 viewport-fit=cover">
-  <link href="https://fonts.googleapis.com/css2?family=Great+Vibes&family=Roboto&display=swap" rel="stylesheet">
-  <title>Video with Overlay Frame</title>
+  <meta charset="UTF-8" />
+  <title>Responsive Framed Video</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
   <style>
-
-    #heart-container {
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      pointer-events: none;
-      z-index: 0;
-    }
-
-    .heart {
-      position: absolute;
-      width: 15px;
-      height: 15px;
-      background: red;
-      transform: rotate(45deg);
-      animation: float 6s linear infinite;
-    }
-
-    .heart::before,
-    .heart::after {
-      content: "";
-      position: absolute;
-      width: 15px;
-      height: 15px;
-      background: red;
-      border-radius: 50%;
-    }
-
-    .heart::before {
-      top: -7.5px;
-      left: 0;
-    }
-
-    .heart::after {
-      left: -7.5px;
-      top: 0;
-    }
-
-    @keyframes float {
-      0% {
-        transform: translateY(100vh) rotate(45deg);
-        opacity: 0;
-      }
-      100% {
-        transform: translateY(-10vh) rotate(45deg);
-        opacity: 1;
-      }
-    }
-
-    @keyframes fadeIn {
-      from {
-        opacity: 0.5;
-        transform: translateY(20px);
-      }
-      to {
-        opacity: 1;
-        transform: translateY(0);
-      }
-    }
-
+    /* ---------- 1. Page layout ---------- */
     body {
-      margin: 0;
-      background: black;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      margin-top: 60px;
-      margin-left: 10px;
-      margin-bottom: 2px;
-      margin-right: 10px;
-      
+      margin:20px 10px 20px 10px;
+      background: #fceef1;
+      display: grid;
+      place-items: center;
+      min-height: 100dvh;         /* safe for mobile “dynamic” viewports */
     }
 
-    
+     header {
+      text-align: center;
+      font-family: 'Great Vibes', cursive;
+      font-size: 3rem;
+      color: black;
+      text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.2);
+    }
+
+    /* ---------- 2. Frame container ----------
+       • Clamp keeps it fluid: 280 px ≤ width ≤ 500 px
+       • aspect-ratio preserves the 3:4 portrait shape                */
     .frame-container {
-  position: relative;
-  width: 90vw;
-  aspect-ratio: 3/4;
-  box-shadow: 0 0 15px rgba(0, 0, 0, 0.15);
-}
+      width: clamp(280px, 90vw, 500px);
+      aspect-ratio: 3 / 4;
+      position: relative;
+    }
 
-    
-
+    /* ---------- 3. Video mask ----------
+       Easily tweak these four % values if you swap the frame image.   */
+    :root {
+      --mask-top:    9%;
+      --mask-right: 16.9%;
+      --mask-bottom:11%;
+      --mask-left:  15.7%;
+    }
     .video-wrapper {
       position: absolute;
-
-      /* Manually tuned based on actual frame image */
-      top: 9%;
-      bottom:11% ;
-      left: 15.7%;
-      right: 16.9%;}
-
+      inset: var(--mask-top) var(--mask-right)
+             var(--mask-bottom) var(--mask-left);
+      overflow: hidden;            /* stops bleed‑through */
+    }
     .video-wrapper video {
       width: 100%;
       height: 100%;
-      object-fit: cover;
+      object-fit: cover;           /* fills the window nicely */
       display: block;
-      border: none;
     }
 
+    /* ---------- 4. Decorative PNG overlay ---------- */
     .frame-overlay {
       position: absolute;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      background: url('21_agustus_9.png') no-repeat center center;
-      background-size: contain;
-      pointer-events: none; /* Allows clicking through the frame */
+      inset: 0;
+      background: url('21_agustus_9.png') center / contain no-repeat;
+      pointer-events: none;        /* clicks still reach the video */
     }
 
-    @media (max-width: 500px) {
-      .frame-container {
-        max-width: 95vw;
-      }
+    /* ---------- 5. Optional: grow a little on ultra‑wide screens */
+    @media (min-width: 1200px) {
+      .frame-container { width: 400px; }
     }
   </style>
 </head>
+
 <body>
-  
-  <div id="heart-container"></div>
+
+  <header>happy birthday chinni</header>
   <div class="frame-container">
     <div class="video-wrapper">
-      <!-- Replace this with your portrait video -->
+      <!-- Replace with your own portrait clip -->
       <video src="your-video.mp4" autoplay muted loop playsinline></video>
     </div>
-    <!-- Frame on top -->
     <div class="frame-overlay"></div>
   </div>
-
-  <script>
-    function createHeart() {
-      const heart = document.createElement('div');
-      heart.className = 'heart';
-      heart.style.left = `${Math.random() * 100}vw`;
-      heart.style.animationDuration = `${4 + Math.random() * 10}s`;
-      document.getElementById('heart-container').appendChild(heart);
-      setTimeout(() => heart.remove(), 7000);
-    }
-
-    setInterval(createHeart, 300);
-  </script>
 </body>
 </html>
